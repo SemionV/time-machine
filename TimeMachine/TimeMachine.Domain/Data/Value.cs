@@ -1,20 +1,6 @@
-using TimeMachine.Domain.References;
-
 namespace TimeMachine.Domain.Data;
 
-public abstract class Value<TValue>: IValue<TValue>
+public abstract class Value<TValue>: Entity
 {
-    private TValue _value;
-    
-    public abstract ObjectType Type { get; }
-
-    public void Write(TValue value, CompoundReference from, CompoundReference to)
-    {
-        _value = value;
-    }
-
-    public TValue Read(CompoundReference from, CompoundReference to)
-    {
-        return _value;
-    }
+    public TValue Data { get; set; }
 }

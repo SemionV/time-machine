@@ -1,9 +1,11 @@
 namespace TimeMachine.Domain.Data;
 
-public enum ObjectType
+public enum EntityType
 {
     Object,
     Integer,
     FloatingPoint,
-    String
+    String,
+    Function,
+    FunctionBinding
 }

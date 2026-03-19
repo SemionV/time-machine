@@ -5,6 +5,9 @@ public enum Instruction
     Return,
     Break,
     Continue,
+    Loop,
+    Branch,
     Write,
-    Read
+    Read,
+    Call
 }

@@ -1,7 +1,7 @@
 namespace TimeMachine.Domain.References;
 
-public class CompoundReference
+public class Reference
 {
     public required IEnumerable<ObjectReference> Path { get; set; }
-    public ValueReference ValueReference { get; set; }
+    public MemberReference Member { get; set; }
 }

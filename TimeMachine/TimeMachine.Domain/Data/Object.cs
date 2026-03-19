@@ -1,8 +1,7 @@
 namespace TimeMachine.Domain.Data;
 
-public class Object: IObject
+public class Object: Entity
 {
-    public ObjectType Type => ObjectType.Object;
-    
-    public required Dictionary<string, IObject> Properties { get; set; }
+    public override EntityType Type => EntityType.Object;
+    public required Dictionary<string, Entity> Properties { get; set; }
 }
