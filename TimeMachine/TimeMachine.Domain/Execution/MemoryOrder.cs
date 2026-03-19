@@ -1,4 +1,4 @@
-namespace TimeMachine.Domain;
+namespace TimeMachine.Domain.Execution;
 
 public enum MemoryOrder
 {

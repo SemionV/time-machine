@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeMachine", "TimeMachine\TimeMachine.csproj", "{4C5AD36E-EB98-4FD0-9C57-4A0D7E1414A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeMachine.Console", "TimeMachine.Console\TimeMachine.Console.csproj", "{4C5AD36E-EB98-4FD0-9C57-4A0D7E1414A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeMachine.Domain", "TimeMachine.Domain\TimeMachine.Domain.csproj", "{42700066-8800-44C8-82BA-99271A71012B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExecutionEngine", "ExecutionEngine\ExecutionEngine.csproj", "{275FE659-C81C-4804-9CA2-20254E89DCA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeMachine.ExecutionEngine", "TimeMachine.ExecutionEngine\TimeMachine.ExecutionEngine.csproj", "{275FE659-C81C-4804-9CA2-20254E89DCA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

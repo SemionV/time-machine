@@ -1,6 +1,6 @@
 namespace TimeMachine.Domain.Data;
 
-public enum ValueType
+public enum ObjectType
 {
     Object,
     Integer,

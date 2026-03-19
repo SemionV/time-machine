@@ -1,8 +1,8 @@
 namespace TimeMachine.Domain.Data;
 
-public class Object: IValue
+public class Object: IObject
 {
-    public ValueType Type => ValueType.Object;
+    public ObjectType Type => ObjectType.Object;
     
-    public required Dictionary<string, IValue> Properties { get; set; }
+    public required Dictionary<string, IObject> Properties { get; set; }
 }

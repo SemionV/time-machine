@@ -1,8 +1,6 @@
 namespace TimeMachine.Domain.Data;
 
-public class String: IValue
+public class String: Value<string>
 {
-    public ValueType Type => ValueType.String;
-    
-    public string Data { get; set; }
+    public override ObjectType Type => ObjectType.String;
 }

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>ExecutionEngine</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Commands\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TimeMachine.Domain\TimeMachine.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

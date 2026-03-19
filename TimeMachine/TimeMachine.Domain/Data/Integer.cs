@@ -1,8 +1,6 @@
 namespace TimeMachine.Domain.Data;
 
-public class Integer: IValue
+public class Integer: Value<long>
 {
-    public ValueType Type => ValueType.Integer;
-
-    public long Data { get; set; }
+    public override ObjectType Type => ObjectType.Integer;
 }

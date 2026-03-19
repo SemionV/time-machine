@@ -1,8 +1,6 @@
 namespace TimeMachine.Domain.Data;
 
-public class FloatingPoint: IValue
+public class FloatingPoint: Value<float>
 {
-    public ValueType Type => ValueType.FloatingPoint;
-    
-    public float Data { get; set; }
+    public override ObjectType Type => ObjectType.FloatingPoint;
 }
