@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\TimeMachine.Domain\TimeMachine.Domain.csproj" />
     </ItemGroup>
 

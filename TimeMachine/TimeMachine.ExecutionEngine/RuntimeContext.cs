@@ -4,5 +4,6 @@ namespace ExecutionEngine;
 
 public class RuntimeContext
 {
-    public required Stack<ExecutionNode> Scope { get; set; }
+    public required Stack<Command> Scope { get; set; }
+    public required Memory Memory { get; set; }
 }
