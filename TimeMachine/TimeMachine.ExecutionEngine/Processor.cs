@@ -1,5 +1,7 @@
 using TimeMachine.Domain.Commands;
+using TimeMachine.Domain.Data;
 using TimeMachine.Domain.Execution;
+using TimeMachine.Domain.References;
 
 namespace ExecutionEngine;
 
@@ -41,5 +43,29 @@ public class Processor
     private void ExecuteReadCommand(Read command, RuntimeContext context)
     {
         
+    }
+
+    private Entity GetEntity(Reference reference, StackFrame frame)
+    {
+        Entity container =  null;
+        if (reference.Path != null)
+        {
+            foreach (var objectReference in reference.Path)
+            {
+                Entity entity = null;
+
+                if (objectReference is ObjectReference)
+                {
+                    if (container == null)
+                    {
+                        frame.Variables.TryGetValue(objectReference.Key, out entity);
+                    }
+                    else
+                    {
+                        if()
+                    }
+                }
+            }
+        }
     }
 }
