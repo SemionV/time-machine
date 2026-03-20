@@ -1,8 +1,9 @@
 using TimeMachine.Domain.Execution;
+using TimeMachine.Domain.LogicalOperators;
 
 namespace TimeMachine.Domain.Commands;
 
-public class Loop: Command
+public abstract class Loop: Command
 {
-    public override Instruction Instruction => Instruction.Loop;
+    public required Operator LogicalOperator { get; set; }
 }
