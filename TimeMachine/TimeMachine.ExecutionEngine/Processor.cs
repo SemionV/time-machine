@@ -1,9 +1,18 @@
 using TimeMachine.Domain.Commands;
 using TimeMachine.Domain.Data;
 using TimeMachine.Domain.Execution;
-using TimeMachine.Domain.References;
 
 namespace ExecutionEngine;
+
+public class InvalidEntityException: Exception
+{
+    
+}
+
+public class TypeMismatchException : Exception
+{
+    
+}
 
 public class Processor
 {
@@ -42,30 +51,14 @@ public class Processor
     
     private void ExecuteReadCommand(Read command, RuntimeContext context)
     {
+        Entity entityFrom = ReferenceResolver.Resolve(command.From, context.Memory.Heap);
+        if(entityFrom == null)
+            throw new InvalidEntityException();
         
-    }
-
-    private Entity GetEntity(Reference reference, StackFrame frame)
-    {
-        Entity container =  null;
-        if (reference.Path != null)
-        {
-            foreach (var objectReference in reference.Path)
-            {
-                Entity entity = null;
-
-                if (objectReference is ObjectReference)
-                {
-                    if (container == null)
-                    {
-                        frame.Variables.TryGetValue(objectReference.Key, out entity);
-                    }
-                    else
-                    {
-                        if()
-                    }
-                }
-            }
-        }
+        Entity entityTo = ReferenceResolver.Resolve(command.To, context.Memory.Stack.Peek());
+        if(entityTo == null)
+            throw new InvalidEntityException();
+        
+        
     }
 }

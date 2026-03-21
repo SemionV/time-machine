@@ -5,5 +5,5 @@ namespace TimeMachine.Domain.Predicates;
 public class Unary: Predicate
 {
     public override PredicateType Type => PredicateType.Unary;
-    public required Reference Reference { get; set; }
+    public required CompoundReference CompoundReference { get; set; }
 }

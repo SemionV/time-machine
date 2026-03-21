@@ -1,7 +1,6 @@
 namespace TimeMachine.Domain.References;
 
-public class Reference
+public abstract class Reference
 {
-    public required IEnumerable<ObjectReference> Path { get; set; }
-    public MemberReference Member { get; set; }
+    public abstract ReferenceType Type { get; }
 }

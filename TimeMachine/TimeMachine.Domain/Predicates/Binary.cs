@@ -4,6 +4,6 @@ namespace TimeMachine.Domain.Predicates;
 
 public abstract class Binary: Predicate
 {
-    public Reference Left { get; set; }
-    public Reference Right { get; set; }
+    public CompoundReference Left { get; set; }
+    public CompoundReference Right { get; set; }
 }

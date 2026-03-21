@@ -11,5 +11,6 @@ public enum Instruction
     Branch,
     Write,
     Read,
-    Call
+    Call,
+    Variable
 }
