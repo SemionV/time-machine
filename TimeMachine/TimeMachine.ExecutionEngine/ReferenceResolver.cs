@@ -1,7 +1,7 @@
-using TimeMachine.Domain.Data;
+using TimeMachine.Domain.Entities;
 using TimeMachine.Domain.References;
-using Array = TimeMachine.Domain.Data.Array;
-using Object = TimeMachine.Domain.Data.Object;
+using Array = TimeMachine.Domain.Entities.Array;
+using Object = TimeMachine.Domain.Entities.Object;
 
 namespace ExecutionEngine;
 

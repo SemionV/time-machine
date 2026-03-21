@@ -1,6 +1,13 @@
-namespace TimeMachine.Domain.Data;
+using Type = TimeMachine.Domain.TypeSystem.Type;
 
-public abstract class Value<TValue>: Entity
+namespace TimeMachine.Domain.Entities;
+
+public abstract class Value<TValue, TType>: TypedEntity<TType>
+    where TType : Type
 {
-    public TValue Data { get; set; }
+    public required TValue Data { get; set; }
+
+    protected Value(TType type) : base(type)
+    {
+    }
 }

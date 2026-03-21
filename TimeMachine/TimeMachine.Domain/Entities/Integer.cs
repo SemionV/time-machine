@@ -1,6 +1,10 @@
-namespace TimeMachine.Domain.Data;
+using TimeMachine.Domain.TypeSystem;
 
-public class Integer: Value<long>
+namespace TimeMachine.Domain.Entities;
+
+public class Integer: Value<long, IntegerType>
 {
-    public override EntityType Type => EntityType.Integer;
+    public Integer(IntegerType type) : base(type)
+    {
+    }
 }

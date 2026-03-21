@@ -1,4 +1,4 @@
-using TimeMachine.Domain.Data;
+using TimeMachine.Domain.Entities;
 
 namespace TimeMachine.Domain.TypeSystem;
 

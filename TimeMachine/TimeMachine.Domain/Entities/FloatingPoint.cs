@@ -1,6 +1,11 @@
-namespace TimeMachine.Domain.Data;
+using TimeMachine.Domain.TypeSystem;
+using Type = TimeMachine.Domain.TypeSystem.Type;
 
-public class FloatingPoint: Value<float>
+namespace TimeMachine.Domain.Entities;
+
+public class FloatingPoint: Value<float, FloatingPointType>
 {
-    public override EntityType Type => EntityType.FloatingPoint;
+    public FloatingPoint(FloatingPointType type):  base(type)
+    {
+    }
 }

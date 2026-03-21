@@ -1,5 +1,5 @@
 using TimeMachine.Domain.Commands;
-using TimeMachine.Domain.Data;
+using TimeMachine.Domain.Entities;
 using TimeMachine.Domain.Execution;
 
 namespace ExecutionEngine;

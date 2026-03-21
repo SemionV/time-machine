@@ -1,4 +1,4 @@
-namespace TimeMachine.Domain.Data;
+namespace TimeMachine.Domain.Entities;
 
 public enum EntityType
 {

@@ -1,6 +1,10 @@
-namespace TimeMachine.Domain.Data;
+using TimeMachine.Domain.TypeSystem;
 
-public class String: Value<string>
+namespace TimeMachine.Domain.Entities;
+
+public class String: Value<string, StringType>
 {
-    public override EntityType Type => EntityType.String;
+    public String(StringType type) : base(type)
+    {
+    }
 }

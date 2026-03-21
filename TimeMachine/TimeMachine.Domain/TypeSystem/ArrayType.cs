@@ -1,8 +1,8 @@
-using TimeMachine.Domain.Data;
+using TimeMachine.Domain.Entities;
 
 namespace TimeMachine.Domain.TypeSystem;
 
-public class Array: Type
+public class ArrayType: Type
 {
     public override EntityType EntityType => EntityType.Array;
     public Type ItemsType { get; set; }

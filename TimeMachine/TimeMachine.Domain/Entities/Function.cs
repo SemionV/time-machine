@@ -1,9 +1,13 @@
 using TimeMachine.Domain.Execution;
+using TimeMachine.Domain.TypeSystem;
 
-namespace TimeMachine.Domain.Data;
+namespace TimeMachine.Domain.Entities;
 
-public class Function: Entity
+public class Function: TypedEntity<FunctionType>
 {
-    public override EntityType Type => EntityType.Function;
     public required ExecutionNode ExecutionNode { get; set; }
+
+    public Function(FunctionType type) : base(type)
+    {
+    }
 }

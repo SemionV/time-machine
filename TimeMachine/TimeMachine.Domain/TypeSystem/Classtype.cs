@@ -1,8 +1,8 @@
-using TimeMachine.Domain.Data;
+using TimeMachine.Domain.Entities;
 
 namespace TimeMachine.Domain.TypeSystem;
 
-public class Class: Type
+public class Classtype: Type
 {
     public override EntityType EntityType => EntityType.Class;
     public Dictionary<string, Type> Members { get; set; }

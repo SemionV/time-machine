@@ -1,7 +1,13 @@
-namespace TimeMachine.Domain.Data;
+using TimeMachine.Domain.TypeSystem;
+using Type = TimeMachine.Domain.TypeSystem.Type;
 
-public class Array: Entity
+namespace TimeMachine.Domain.Entities;
+
+public class Array: TypedEntity<ArrayType>
 {
-    public override EntityType Type => EntityType.Array;
     public required List<Entity> Items { get; set; }
+
+    public Array(ArrayType arrayType): base(arrayType)
+    {
+    }
 }
