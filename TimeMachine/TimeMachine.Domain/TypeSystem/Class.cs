@@ -1,0 +1,10 @@
+using TimeMachine.Domain.Data;
+
+namespace TimeMachine.Domain.TypeSystem;
+
+public class Class: Type
+{
+    public override EntityType EntityType => EntityType.Class;
+    public Dictionary<string, Type> Members { get; set; }
+    public Dictionary<string, Entity> InitializationValues { get; set; }
+}
