@@ -2,12 +2,12 @@ using TimeMachine.Domain.TypeSystem;
 
 namespace TimeMachine.Domain.Entities;
 
-public class Object: TypedEntity<Classtype>
+public class Object: TypedEntity<ClassType>
 {
-    public required Dictionary<string, Entity> Fields { get; set; }
+    public Dictionary<string, Entity> Fields { get; }
     
-    public Object(Classtype type, Dictionary<string, Entity> fields) : base(type)
+    public Object(ClassType type) : base(type)
     {
-        Fields = fields;
+        Fields = new Dictionary<string, Entity>();
     }
 }

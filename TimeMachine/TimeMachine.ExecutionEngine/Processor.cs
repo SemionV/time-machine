@@ -1,18 +1,9 @@
 using TimeMachine.Domain.Commands;
 using TimeMachine.Domain.Entities;
+using TimeMachine.Domain.Exceptions.Execution;
 using TimeMachine.Domain.Execution;
 
 namespace ExecutionEngine;
-
-public class InvalidEntityException: Exception
-{
-    
-}
-
-public class TypeMismatchException : Exception
-{
-    
-}
 
 public class Processor
 {

@@ -1,13 +1,10 @@
 using TimeMachine.Domain.Entities;
+using TimeMachine.Domain.Exceptions.ReferenceSystem;
 using TimeMachine.Domain.References;
 using Array = TimeMachine.Domain.Entities.Array;
 using Object = TimeMachine.Domain.Entities.Object;
 
 namespace ExecutionEngine;
-
-public class ReferenceResolutionException : Exception
-{
-}
 
 public class ReferenceResolver
 {
@@ -22,10 +19,13 @@ public class ReferenceResolver
                 
             if (reference.Type == ReferenceType.ArrayItem)
             {
-                if (entity.Type == EntityType.Array)
+                if (entity.Type.EntityType == EntityType.Array)
                 {
                     var index = (reference as ArrayItemReference).Index;
-                    entity = (entity as Array).Items[index];
+                    var array = entity as Array;
+                    if(index < 0 || index >= array.Length)
+                        throw new InvalidArrayIndex(index, array.Length);
+                    entity = array[index];
                 }
                 else
                 {
@@ -35,7 +35,7 @@ public class ReferenceResolver
             }
             else if(reference.Type == ReferenceType.ObjectMember)
             {
-                if (entity.Type == EntityType.Class)
+                if (entity.Type.EntityType == EntityType.Class)
                 {
                     var key = (reference as ObjectMemberReference).Key;
                     (entity as Object).Fields.TryGetValue(key, out entity);
