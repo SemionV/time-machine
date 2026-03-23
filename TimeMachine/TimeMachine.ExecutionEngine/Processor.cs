@@ -50,6 +50,19 @@ public class Processor
         if(entityTo == null)
             throw new InvalidEntityException();
         
+        Instantiator.Copy(entityFrom, entityTo);
+    }
+    
+    private void ExecuteWriteCommand(Read command, RuntimeContext context)
+    {
+        Entity entityFrom = ReferenceResolver.Resolve(command.From, context.Memory.Stack.Peek());
+        if(entityFrom == null)
+            throw new InvalidEntityException();
         
+        Entity entityTo = ReferenceResolver.Resolve(command.To, context.Memory.Heap);
+        if(entityTo == null)
+            throw new InvalidEntityException();
+        
+        Instantiator.Copy(entityFrom, entityTo);
     }
 }
