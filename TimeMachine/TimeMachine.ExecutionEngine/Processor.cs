@@ -37,6 +37,9 @@ public class Processor
             case Instruction.Read:
                 ExecuteReadCommand(command as Read, context);
                 break;
+            case Instruction.Write:
+                ExecuteWriteCommand(command as Write, context);
+                break;
         }
     }
     
@@ -53,7 +56,7 @@ public class Processor
         Instantiator.Copy(entityFrom, entityTo);
     }
     
-    private void ExecuteWriteCommand(Read command, RuntimeContext context)
+    private void ExecuteWriteCommand(Write command, RuntimeContext context)
     {
         Entity entityFrom = ReferenceResolver.Resolve(command.From, context.Memory.Stack.Peek());
         if(entityFrom == null)

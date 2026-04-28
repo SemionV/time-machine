@@ -1,6 +1,6 @@
 namespace TimeMachine.Domain.Predicates;
 
-public class GreaterThan: Binary
+public class GreaterThan: Predicate
 {
     public override PredicateType Type => PredicateType.GreaterThan;
 }
