@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
 using TimeMachine.Domain.Entities;
 using TimeMachine.Domain.Exceptions.Logic.Predicates;
 using TimeMachine.Domain.LogicalOperators;
@@ -11,18 +10,18 @@ namespace ExecutionEngine;
 
 public class LogicProcessor
 {
-    public static bool Process(Operator op)
+    public static bool Process(Operator op, RuntimeContext context)
     {
         if (op.Type == LogicalOperatorType.Unary)
         {
             var unaryOperator = op as UnaryOperator;
             
-            return Process(unaryOperator.Argument);
+            return Process(unaryOperator.Argument, context);
         }
         
         if (op.Type == LogicalOperatorType.Predicate)
         {
-            return ProcessOperator(op as BinaryOperator, (l, r) => l && r);
+            return Process((op as OperatorPredicate).Predicate, context);
         }
         
         if (op.Type == LogicalOperatorType.Unary)
@@ -30,31 +29,39 @@ public class LogicProcessor
             var unaryOperator = op as UnaryOperator;
             if(unaryOperator == null)
                 throw new ArgumentException();
-            return Process(unaryOperator.Argument);
+            return Process(unaryOperator.Argument, context);
         }
         
         if (op.Type == LogicalOperatorType.And)
         {
-            return ProcessOperator(op as BinaryOperator, (l, r) => l && r);
+            return ProcessOperator(op as BinaryOperator, context, (l, r) => l && r);
         }
 
         return false;
     }
 
-    private static bool ProcessOperator(BinaryOperator? op, Func<bool, bool, bool> proposition)
+    private static bool ProcessOperator(BinaryOperator? op, RuntimeContext context, Func<bool, bool, bool> proposition)
     {
         if(op == null)
             throw new ArgumentException();
-        var leftTruth = Process(op.Left);
-        var rightTruth = Process(op.Right);
+        var leftTruth = Process(op.Left, context);
+        var rightTruth = Process(op.Right, context);
         return proposition(leftTruth, rightTruth);
     }
 
-    public static bool Process(Predicate predicate)
+    public static bool Process(Predicate predicate, RuntimeContext context)
     {
+        var leftEntity = ReferenceResolver.Resolve(predicate.Left, context.Memory.Heap);
+        if(leftEntity == null)
+            throw new UnresolvedReference(predicate.Left);
+        var rightEntity = ReferenceResolver.Resolve(predicate.Right, context.Memory.Heap);
+        if(rightEntity == null)
+            throw new UnresolvedReference(predicate.Right);
         
+        if(predicate.Type == PredicateType.Equal)
+            return PredicateEqual(leftEntity, rightEntity);
         
-        return false;
+        throw new UnsupportedPredicate(predicate);
     }
 
     private static bool PredicateEqual(Entity left, Entity right)
