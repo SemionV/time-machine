@@ -35,7 +35,7 @@ public class ReferenceResolver
             }
             else if(reference.Type == ReferenceType.ObjectMember)
             {
-                if (entity.Type.EntityType == EntityType.Class)
+                if (entity.Type.EntityType == EntityType.Object)
                 {
                     var key = (reference as ObjectMemberReference).Key;
                     (entity as Object).Fields.TryGetValue(key, out entity);

@@ -2,7 +2,7 @@ namespace TimeMachine.Domain.Entities;
 
 public enum EntityType
 {
-    Class,
+    Object,
     Array,
     Integer,
     FloatingPoint,

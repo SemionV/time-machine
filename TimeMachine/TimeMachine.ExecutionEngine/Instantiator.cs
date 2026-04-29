@@ -17,7 +17,7 @@ public class Instantiator
         {
             entity = new Array(type as ArrayType);
         }
-        else if (type.EntityType == EntityType.Class)
+        else if (type.EntityType == EntityType.Object)
         {
             var classType = type as ClassType;
             var obj = new Object(classType);
@@ -75,7 +75,7 @@ public class Instantiator
                 Copy(sourceArray[i], targetArray[i]);
             }
         }
-        else if (sourceType.EntityType == EntityType.Class)
+        else if (sourceType.EntityType == EntityType.Object)
         {
             var sourceObject = source as Object;
             var targetObject = target as Object;
