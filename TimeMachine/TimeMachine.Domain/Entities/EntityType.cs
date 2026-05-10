@@ -4,6 +4,7 @@ public enum EntityType
 {
     Object,
     Array,
+    Boolean,
     Integer,
     FloatingPoint,
     String,

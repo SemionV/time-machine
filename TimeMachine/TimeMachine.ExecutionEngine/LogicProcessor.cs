@@ -1,8 +1,10 @@
 using TimeMachine.Domain.Entities;
 using TimeMachine.Domain.Exceptions.Logic.Predicates;
+using TimeMachine.Domain.Exceptions.Logic.Propositions;
 using TimeMachine.Domain.LogicalOperators;
 using TimeMachine.Domain.Predicates;
 using Array = TimeMachine.Domain.Entities.Array;
+using Boolean = TimeMachine.Domain.Entities.Boolean;
 using Object = TimeMachine.Domain.Entities.Object;
 using String = TimeMachine.Domain.Entities.String;
 
@@ -16,25 +18,36 @@ public class LogicProcessor
         {
             var unaryOperator = op as UnaryOperator;
             
-            return Process(unaryOperator.Argument, context);
-        }
-        
-        if (op.Type == LogicalOperatorType.Predicate)
-        {
-            return Process((op as OperatorPredicate).Predicate, context);
-        }
-        
-        if (op.Type == LogicalOperatorType.Unary)
-        {
-            var unaryOperator = op as UnaryOperator;
-            if(unaryOperator == null)
-                throw new ArgumentException();
-            return Process(unaryOperator.Argument, context);
+            var entity = ReferenceResolver.Resolve(unaryOperator.Argument, context.Memory.Stack.Peek());
+            if(entity == null)
+                throw new UnresolvedReference(unaryOperator.Argument);
+            
+            if (entity.Type.EntityType == EntityType.Boolean)
+            {
+                return (entity as Boolean).Data;
+            }
+
+            if (entity.Type.EntityType == EntityType.Integer)
+            {
+                return (entity as Integer).Data != 0;
+            }
+            
+            if (entity.Type.EntityType == EntityType.FloatingPoint)
+            {
+                return (entity as FloatingPoint).Data != 0.0f;
+            }
+
+            throw new InvalidUnaryArgument(LogicalOperatorType.Unary, entity);
         }
         
         if (op.Type == LogicalOperatorType.And)
         {
             return ProcessOperator(op as BinaryOperator, context, (l, r) => l && r);
+        }
+        
+        if (op.Type == LogicalOperatorType.Predicate)
+        {
+            return Process((op as OperatorPredicate).Predicate, context);
         }
 
         return false;
@@ -51,15 +64,25 @@ public class LogicProcessor
 
     public static bool Process(Predicate predicate, RuntimeContext context)
     {
-        var leftEntity = ReferenceResolver.Resolve(predicate.Left, context.Memory.Heap);
+        var leftEntity = ReferenceResolver.Resolve(predicate.Left, context.Memory.Stack.Peek());
         if(leftEntity == null)
             throw new UnresolvedReference(predicate.Left);
-        var rightEntity = ReferenceResolver.Resolve(predicate.Right, context.Memory.Heap);
+        var rightEntity = ReferenceResolver.Resolve(predicate.Right, context.Memory.Stack.Peek());
         if(rightEntity == null)
             throw new UnresolvedReference(predicate.Right);
         
         if(predicate.Type == PredicateType.Equal)
             return PredicateEqual(leftEntity, rightEntity);
+        if(predicate.Type == PredicateType.NotEqual)
+            return PredicateNotEqual(leftEntity, rightEntity);
+        if(predicate.Type == PredicateType.LessThan)
+            return PredicateLessThan(leftEntity, rightEntity);
+        if(predicate.Type == PredicateType.LessThanOrEqual)
+            return PredicateLessThanOrEqual(leftEntity, rightEntity);
+        if(predicate.Type == PredicateType.GreaterThan)
+            return PredicateGreaterThan(leftEntity, rightEntity);
+        if(predicate.Type == PredicateType.GreaterThanOrEqual)
+            return PredicateGreaterThanOrEqual(leftEntity, rightEntity);
         
         throw new UnsupportedPredicate(predicate);
     }
@@ -80,7 +103,7 @@ public class LogicProcessor
                 return leftInteger.Data == (right as FloatingPoint).Data;
             }
 
-            throw new InvalidArgumentEqual(left.Type.EntityType, right.Type.EntityType);
+            throw new InvalidArgument(PredicateType.Equal, left.Type.EntityType, right.Type.EntityType);
         }
         
         if (left.Type.EntityType == EntityType.FloatingPoint)
@@ -97,7 +120,7 @@ public class LogicProcessor
                 return leftFloat.Data == (right as Integer).Data;
             }
 
-            throw new InvalidArgumentEqual(left.Type.EntityType, right.Type.EntityType);
+            throw new InvalidArgument(PredicateType.Equal, left.Type.EntityType, right.Type.EntityType);
         }
 
         if (left.Type.EntityType == EntityType.String)
@@ -109,7 +132,7 @@ public class LogicProcessor
                 return leftString.Data == (right as String).Data;
             }
             
-            throw new InvalidArgumentEqual(left.Type.EntityType, right.Type.EntityType);
+            throw new InvalidArgument(PredicateType.Equal, left.Type.EntityType, right.Type.EntityType);
         }
 
         if (left.Type.EntityType == EntityType.Array)
@@ -133,7 +156,7 @@ public class LogicProcessor
                 }
             }
             
-            throw new InvalidArgumentEqual(left.Type.EntityType, right.Type.EntityType);
+            throw new InvalidArgument(PredicateType.Equal, left.Type.EntityType, right.Type.EntityType);
         }
         
         if (left.Type.EntityType == EntityType.Object)
@@ -154,7 +177,7 @@ public class LogicProcessor
                 }
             }
             
-            throw new InvalidArgumentEqual(left.Type.EntityType, right.Type.EntityType);
+            throw new InvalidArgument(PredicateType.Equal, left.Type.EntityType, right.Type.EntityType);
         }
 
         if (left.Type.EntityType == EntityType.Function)
@@ -168,7 +191,7 @@ public class LogicProcessor
                 return leftFunction.FunctionBody == rightFunction.FunctionBody;
             }
             
-            throw new InvalidArgumentEqual(left.Type.EntityType, right.Type.EntityType);
+            throw new InvalidArgument(PredicateType.Equal, left.Type.EntityType, right.Type.EntityType);
         }
         
         if (left.Type.EntityType == EntityType.FunctionBinding)
@@ -182,9 +205,68 @@ public class LogicProcessor
                 return leftFunction.Callback == rightFunction.Callback;
             }
             
-            throw new InvalidArgumentEqual(left.Type.EntityType, right.Type.EntityType);
+            throw new InvalidArgument(PredicateType.Equal, left.Type.EntityType, right.Type.EntityType);
         }
 
-        throw new UnsupportedTypeEqual(left.Type.EntityType);
+        throw new UnsupportedType(PredicateType.Equal, left.Type.EntityType);
+    }
+
+    private static bool PredicateNotEqual(Entity left, Entity right)
+    {
+        return !PredicateEqual(left, right);
+    }
+
+    private static bool PredicateGreaterThan(Entity left, Entity right)
+    {
+        if (left.Type.EntityType == EntityType.Integer)
+        {
+            var leftInteger = (Integer) left;
+            
+            if (right.Type.EntityType == EntityType.Integer)
+            {
+                return leftInteger.Data > (right as Integer).Data;
+            }
+
+            if (right.Type.EntityType == EntityType.FloatingPoint)
+            {
+                return leftInteger.Data > (right as FloatingPoint).Data;
+            }
+
+            throw new InvalidArgument(PredicateType.GreaterThan, left.Type.EntityType, right.Type.EntityType);
+        }
+        
+        if (left.Type.EntityType == EntityType.FloatingPoint)
+        {
+            var leftFloatingPoint = (FloatingPoint) left;
+            
+            if (right.Type.EntityType == EntityType.FloatingPoint)
+            {
+                return leftFloatingPoint.Data > (right as FloatingPoint).Data;
+            }
+            
+            if (right.Type.EntityType == EntityType.Integer)
+            {
+                return leftFloatingPoint.Data > (right as Integer).Data;
+            }
+
+            throw new InvalidArgument(PredicateType.GreaterThan, left.Type.EntityType, right.Type.EntityType);
+        }
+        
+        throw new UnsupportedType(PredicateType.GreaterThan, left.Type.EntityType);
+    }
+
+    private static bool PredicateGreaterThanOrEqual(Entity left, Entity right)
+    {
+        return PredicateGreaterThan(right, left) || PredicateEqual(left, right);
+    }
+
+    private static bool PredicateLessThan(Entity left, Entity right)
+    {
+        return !PredicateGreaterThanOrEqual(left, right);
+    }
+    
+    private static bool PredicateLessThanOrEqual(Entity left, Entity right)
+    {
+        return !PredicateGreaterThan(right, left);
     }
 }
